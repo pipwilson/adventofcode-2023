@@ -7,7 +7,7 @@ final class DayTwo
     {
         $gameIdPattern = '/Game (\d+)/';
         if (preg_match($gameIdPattern, $line, $matches, PREG_OFFSET_CAPTURE) == 1) {
-            $match = $matches[0];
+            $match = $matches[1][0];
             return (int)$match;
         } else {
             return -1;
@@ -24,14 +24,19 @@ final class DayTwo
         }
     }
 
+    public function valuesAreAllowed($largestBlue, $largestRed, $largestGreen): bool 
+    { 
+        // 12 red cubes, 13 green cubes, and 14 blue cubes
+        if($largestBlue <= 14 && $largestRed <= 12 && $largestGreen <= 13) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    public function getLargestRedValue($line): int { return -1; }
-    public function getLargestGreenValue($line): int { return -1; }
-    public function valuesAreAllowed($largestBlue, $largestRed, $largestGreen): bool { return false; }
-
-    public function readInputFile(): void
+    public function readInputFile($filename): int
     {
-        $lines = file('example-games.txt', FILE_SKIP_EMPTY_LINES);
+        $lines = file($filename, FILE_SKIP_EMPTY_LINES);
 
         $total = 0;
 
@@ -48,6 +53,6 @@ final class DayTwo
             }
         }
 
-        print $total;
+        return $total;
     }
 }

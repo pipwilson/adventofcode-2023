@@ -14,7 +14,7 @@ final class DayTwoTest extends TestCase
         $dayTwo = new DayTwo;
         $gameId = $dayTwo->getGameId($line);
 
-        $this->assertEquals(1, $gameId);
+        $this->assertEquals(99, $gameId);
     }
 
     public function testGetLargestBlueValue(): void
@@ -45,6 +45,14 @@ final class DayTwoTest extends TestCase
         $gameId = $dayTwo->getLargestColourValue('green', $line);
 
         $this->assertEquals(13, $gameId);
+    }
+
+    public function testReadInputFile(): void
+    {
+        $dayTwo = new DayTwo;
+        $total = $dayTwo->readInputFile('example-games.txt');
+
+        $this->assertEquals(8, $total);
     }
 
 }
