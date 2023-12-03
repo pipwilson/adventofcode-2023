@@ -55,4 +55,22 @@ final class DayTwo
 
         return $total;
     }
+
+    public function readInputFilePartTwo($filename): int
+    {
+        $lines = file($filename, FILE_SKIP_EMPTY_LINES);
+
+        $total = 0;
+
+        foreach ($lines as $line) {
+
+            $largestBlue = $this->getLargestColourValue('blue', $line);
+            $largestRed = $this->getLargestColourValue('red', $line);
+            $largestGreen = $this->getLargestColourValue('green', $line);
+
+            $total = $total + ($largestBlue * $largestRed * $largestGreen);
+        }
+
+        return $total;
+    }
 }

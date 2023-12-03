@@ -55,4 +55,12 @@ final class DayTwoTest extends TestCase
         $this->assertEquals(8, $total);
     }
 
+    public function testReadInputFilePartTwo(): void
+    {
+        $dayTwo = new DayTwo;
+        $total = $dayTwo->readInputFilePartTwo('example-games.txt');
+
+        $this->assertEquals(2286, $total);
+    }
+
 }
