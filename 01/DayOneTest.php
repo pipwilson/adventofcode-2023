@@ -155,13 +155,13 @@ final class DayOneTest extends TestCase
 
     public function testBuildFullNumber7(): void
     {
-        $line = "7pqrstsixteen";
+        $line = "fivecgtwotwo3oneighth";
         $dayOne = new DayOne;
         $firstNumber = $dayOne->getFirstNumberFromLine($line);
         $lastNumber = $dayOne->getLastNumberFromLine($line);
 
         $fullNumber = (int)($firstNumber . $lastNumber);
-        $this->assertEquals(76, $fullNumber);
+        $this->assertEquals(58, $fullNumber);
     }
 
 }

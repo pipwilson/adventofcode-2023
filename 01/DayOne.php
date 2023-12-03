@@ -18,9 +18,9 @@ final class DayOne
 
     public function getLastNumberFromLine($line): int
     {
-        $lastNumberPattern = "/(one|two|three|four|five|six|seven|eight|nine|\d)/";
+        $lastNumberPattern = "/(?=(one|two|three|four|five|six|seven|eight|nine|\d))/";
         if (preg_match_all($lastNumberPattern, $line, $matches) > 0) {
-            $match = $matches[0][count($matches[0]) - 1];
+            $match = $matches[1][count($matches[0]) - 1];
             return $this->convertMatch($match);
         } else {
             return -1;
