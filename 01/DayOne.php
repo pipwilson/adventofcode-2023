@@ -18,6 +18,7 @@ final class DayOne
 
     public function getLastNumberFromLine($line): int
     {
+        // uses lookaround patterns https://www.regular-expressions.info/lookaround.html
         $lastNumberPattern = "/(?=(one|two|three|four|five|six|seven|eight|nine|\d))/";
         if (preg_match_all($lastNumberPattern, $line, $matches) > 0) {
             $match = $matches[1][count($matches[0]) - 1];
