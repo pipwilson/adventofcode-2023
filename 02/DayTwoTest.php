@@ -9,7 +9,7 @@ final class DayTwoTest extends TestCase
  
     public function testGetGameId(): void
     {
-        $line = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
+        $line = "Game 99: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
 
         $dayTwo = new DayTwo;
         $gameId = $dayTwo->getGameId($line);
@@ -17,4 +17,6 @@ final class DayTwoTest extends TestCase
         $this->assertEquals(1, $gameId);
     }
 
+
+    
 }
