@@ -17,6 +17,34 @@ final class DayTwoTest extends TestCase
         $this->assertEquals(1, $gameId);
     }
 
+    public function testGetLargestBlueValue(): void
+    {
+        $line = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red";
 
-    
+        $dayTwo = new DayTwo;
+        $gameId = $dayTwo->getLargestColourValue('blue', $line);
+
+        $this->assertEquals(6, $gameId);
+    }
+
+    public function testGetLargestRedValue(): void
+    {
+        $line = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red";
+
+        $dayTwo = new DayTwo;
+        $gameId = $dayTwo->getLargestColourValue('red', $line);
+
+        $this->assertEquals(20, $gameId);
+    }
+
+    public function testGetLargestGreenValue(): void
+    {
+        $line = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red";
+
+        $dayTwo = new DayTwo;
+        $gameId = $dayTwo->getLargestColourValue('green', $line);
+
+        $this->assertEquals(13, $gameId);
+    }
+
 }
