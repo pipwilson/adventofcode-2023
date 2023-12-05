@@ -134,4 +134,11 @@ final class DayThreeTest extends TestCase
         $result = $dayThree->getPartListSum('example-schematic.txt');
         $this->assertEquals(4361, $result);
     }
+
+    public function testSampleInput(): void
+    {
+        $dayThree = new DayThree;
+        $result = $dayThree->getPartListSum('sample-input.txt');
+        $this->assertEquals(100, $result);
+    }
 }

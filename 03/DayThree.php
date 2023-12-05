@@ -2,9 +2,6 @@
 
 final class DayThree
 {
-
-
-
     public function hasSymbolOnLeft($lines, $number): bool
     {
         if($number['column'] == 0) {
@@ -16,8 +13,8 @@ final class DayThree
 
     public function hasSymbolOnRight($lines, $number): bool
     {
-        $columnToCheck = $number['column']+strlen(''.$number['column'])+2;
-        if(strlen($lines[0])==$columnToCheck) {
+        $columnToCheck = $number['column']+strlen(''.$number['number']);
+        if(strlen(''.$lines[0])==$columnToCheck) {
             return false;
         }
         return $this->stringContainsSymbol($lines[$number['row']][$columnToCheck]);
@@ -28,8 +25,15 @@ final class DayThree
         if($number['row']==0) {
             return false;
         }
+
+        if($number['column'] == 0) {
+            $column = 0; 
+        } else {
+            $column = $number['column']-1;
+        } 
+
         // +2 for the character before and after the string to capture diagonals
-        $stringToCheck = substr(''.$lines[$number['row']-1], $number['column']-1, strlen(''.$number['number'])+2);
+        $stringToCheck = substr(''.$lines[$number['row']-1], $column, strlen(''.$number['number'])+2);
         return $this->stringContainsSymbol($stringToCheck);
     }
 
@@ -37,11 +41,17 @@ final class DayThree
     {
         if(count($lines)==$number['row']+1) {
             return false;
+        } 
+
+        if($number['column'] == 0) {
+            $column = 0; 
         } else {
-            $number['column'] == 0? $column = 0  : $column = $number['column']-1;
-            $stringToCheck = substr($lines[$number['row']+1], $column, strlen(''.$number['number'])+2);
-            return $this->stringContainsSymbol($stringToCheck);
-        }
+            $column = $number['column']-1;
+        } 
+
+        $stringToCheck = substr(''.$lines[$number['row']+1], $column, strlen(''.$number['number'])+2);
+        return $this->stringContainsSymbol($stringToCheck);
+
     }
 
     // given a number at a position, check all around it for a symbol
@@ -53,6 +63,7 @@ final class DayThree
         $isSymbolAbove = $this->hasSymbolAbove($lines, $number);
         $isSymbolBelow = $this->hasSymbolBelow($lines, $number);
 
+        // print("\n".$isSymbolToLeft .' | '. $isSymbolToRight .' | '. $isSymbolAbove .' | '. $isSymbolBelow);
         return $isSymbolToLeft || $isSymbolToRight || $isSymbolAbove || $isSymbolBelow;
     }
 
