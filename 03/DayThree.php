@@ -14,7 +14,7 @@ final class DayThree
     public function hasSymbolOnRight($lines, $number): bool
     {
         $columnToCheck = $number['column']+strlen(''.$number['number']);
-        if(strlen(''.$lines[0])==$columnToCheck) {
+        if(strlen(trim(''.$lines[0]))==$columnToCheck) {
             return false;
         }
         return $this->stringContainsSymbol($lines[$number['row']][$columnToCheck]);
