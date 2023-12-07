@@ -33,6 +33,7 @@ final class DayThree
         } 
 
         // +2 for the character before and after the string to capture diagonals
+        // TODO is there a bug here if the number is at the right and the symbol is only above?
         $stringToCheck = substr(''.$lines[$number['row']-1], $column, strlen(''.$number['number'])+2);
         return $this->stringContainsSymbol($stringToCheck);
     }
@@ -44,12 +45,15 @@ final class DayThree
         } 
 
         if($number['column'] == 0) {
-            $column = 0; 
+            $column = 0;
+            $lengthToCheck = strlen(''.$number['number'])+1;
         } else {
             $column = $number['column']-1;
+            $lengthToCheck = strlen(''.$number['number'])+2;
         } 
 
-        $stringToCheck = substr(''.$lines[$number['row']+1], $column, strlen(''.$number['number'])+2);
+        $stringToCheck = substr(''.$lines[$number['row']+1], $column, $lengthToCheck);
+        // print($stringToCheck."\n");
         return $this->stringContainsSymbol($stringToCheck);
 
     }
@@ -108,6 +112,9 @@ final class DayThree
         foreach($numbersAndLocations as $number) {
             if($this->checkForSymbol($lines, $number)) {
                 $total += $number['number'];
+                // print('Adding '.$number['number']."\n");
+            } else {
+                // print('Ignoring '.$number['number']."\n");
             }
         }
         return $total;
