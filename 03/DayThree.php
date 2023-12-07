@@ -86,7 +86,7 @@ final class DayThree
         $numbers = [];
 
          // we could run the match on the whole file but would need to recalculate position offset based on EOL bytes
-         // so it's just easier to loop each line
+         // , so it's just easier to loop each line
         $lines = file($filename, FILE_SKIP_EMPTY_LINES);
 
         $numberPattern = '/(\d+)/';
@@ -112,9 +112,19 @@ final class DayThree
         foreach($numbersAndLocations as $number) {
             if($this->checkForSymbol($lines, $number)) {
                 $total += $number['number'];
-                // print('Adding '.$number['number']."\n");
-            } else {
-                // print('Ignoring '.$number['number']."\n");
+            }
+        }
+        return $total;
+    }
+
+    public function getGearSum($filename): int
+    {
+        $total = 0;
+        $lines = file($filename, FILE_SKIP_EMPTY_LINES);
+        $numbersAndLocations = $this->getNumbersAndLocations($filename);
+        foreach($numbersAndLocations as $number) {
+            if($this->checkForSymbol($lines, $number)) {
+                $total += $number['number'];
             }
         }
         return $total;
