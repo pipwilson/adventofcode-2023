@@ -2,4 +2,5 @@
     require_once 'DayThree.php';
     $dayThree = new DayThree;
     print($dayThree->getPartListSum('schematic.txt')."\n");
+    print($dayThree->getGearSum('schematic.txt')."\n");
 ?>

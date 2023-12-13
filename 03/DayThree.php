@@ -81,6 +81,28 @@ final class DayThree
         return false;
     }
 
+    public function getAsterices($filename): array
+    {
+        $asterices = [];
+
+        // we could run the match on the whole file but would need to recalculate position offset based on EOL bytes
+        // , so it's just easier to loop each line
+        $lines = file($filename, FILE_SKIP_EMPTY_LINES);
+
+        $numberPattern = '/(\*)/';
+        for ($row = 0; $row < count($lines); $row++) {
+            if(preg_match_all($numberPattern, $lines[$row], $matches, PREG_OFFSET_CAPTURE, 0) > 0) {
+                foreach($matches[1] as $match) {
+                    $detail['row'] = $row;
+                    $detail['column'] = $match[1];
+                    $asterices[] = $detail;
+                }
+            }
+        }
+
+        return $asterices;
+    }
+
     public function getNumbersAndLocations($filename): array
     {
         $numbers = [];
@@ -120,25 +142,92 @@ final class DayThree
     public function getGearSum($filename): int
     {
         $total = 0;
-        $lines = file($filename, FILE_SKIP_EMPTY_LINES);
+        //$lines = file($filename, FILE_SKIP_EMPTY_LINES);
+
+        // create an array which only contains numbers
         $numbersAndLocations = $this->getNumbersAndLocations($filename);
-        foreach($numbersAndLocations as $number) {
-            if($this->checkForSymbol($lines, $number)) {
-                $total += $number['number'];
+
+        // create an array of every asterisk in the file and its co-ordinates
+        $asterices = $this->getAsterices($filename);
+
+        // then loop over asterices and check if it has a number next to it, adding to a match if found
+        foreach($asterices as $asterisk) {
+            unset($nearbyNumber);
+            foreach($numbersAndLocations as $numberWithAsterisk) {
+                if($this->isNumberNextToAsterisk($numberWithAsterisk, $asterisk)) {
+                    $nearbyNumber[] = $numberWithAsterisk;
+                }
+            }
+
+            // if there are exactly two numbers around an asterisk then multiply them and add to total
+            if(count($nearbyNumber)==2) {
+                $total += $nearbyNumber[0]['number'] * $nearbyNumber[1]['number'];
             }
         }
+
         return $total;
     }
 
-    // maybe we can sum all numbers and then subtract the ones which don't have a symbol nearby?
-    public function sumAllNumbers($filename): int
+    public function isNumberNextToAsterisk($numberWithAsterisk, $asterisk): bool
     {
-        $schematic = file_get_contents($filename);
-        $numberPattern = '/(\d+)/';
-        if (preg_match_all($numberPattern, $schematic, $matches) > 0) {
-            return array_sum($matches[0]);
+        if(in_array($numberWithAsterisk['row'], range($asterisk['row']-1, $asterisk['row']+1))) {
+            $isNumberOnLeftOfAsterisk = $this->isNumberOnLeftOfAsterisk($numberWithAsterisk, $asterisk);
+            $isNumberOnRightOfAsterisk = $this->isNumberOnRightOfAsterisk($numberWithAsterisk, $asterisk);
+            $isNumberAboveAsterisk = $this->isNumberAboveAsterisk($numberWithAsterisk, $asterisk);
+            $isNumberBelowAsterisk = $this->isNumberBelowAsterisk($numberWithAsterisk, $asterisk);
+            return $isNumberOnLeftOfAsterisk || $isNumberOnRightOfAsterisk || $isNumberAboveAsterisk || $isNumberBelowAsterisk;
+        } else {
+            return false;
         }
-        return -1;
+    }
+
+    public function isNumberOnLeftOfAsterisk($numberWithAsterisk, $asterisk): bool
+    {
+        // if true, asterisk is on same row and starts at the position after the number
+        if($asterisk['row'] == $numberWithAsterisk['row']) {
+            return $asterisk['column'] == $numberWithAsterisk['column'] + strlen('' . $numberWithAsterisk['number']);
+        } else {
+            return false;
+        }
+    }
+
+    private function isNumberOnRightOfAsterisk($numberWithAsterisk, $asterisk): bool
+    {
+        // if true, asterisk starts at the position after the number
+        if($asterisk['row'] == $numberWithAsterisk['row']) {
+            return $asterisk['column'] + 1 == $numberWithAsterisk['column'];
+        } else {
+            return false;
+        }
+    }
+
+    private function isNumberAboveAsterisk($numberWithAsterisk, $asterisk): bool
+    {
+        // row of number is row of asterisk-1
+        // column of asterisk is within range of start of number to end of number
+        if($asterisk['row']-1 == $numberWithAsterisk['row']) {
+            for ($i = $asterisk['column'] - 1; $i <= $asterisk['column'] + 1; $i++) {
+                if (in_array($i, range($numberWithAsterisk['column'], $numberWithAsterisk['column'] + strlen('' . $numberWithAsterisk['number'])-1))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+
+    private function isNumberBelowAsterisk($numberWithAsterisk, $asterisk): bool
+    {
+        if($asterisk['row']+1 == $numberWithAsterisk['row']) {
+            for ($i = $asterisk['column'] - 1; $i <= $asterisk['column'] + 1; $i++) {
+                if (in_array($i, range($numberWithAsterisk['column'], $numberWithAsterisk['column'] + strlen('' . $numberWithAsterisk['number'])-1))) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }
