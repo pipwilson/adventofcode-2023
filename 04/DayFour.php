@@ -3,4 +3,8 @@
 final class DayFour
 {
 
+    public function getScratchcardPoints($filename): int
+    {
+        return -1;
+    }
 }
